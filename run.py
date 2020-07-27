@@ -1,3 +1,5 @@
+"""Frontend for interacting with a trained word2vec model."""
+
 import copy
 import heapq
 import pickle
@@ -24,6 +26,10 @@ def n_most_similar(embedding, embeddings, n=5):
 class Frontend:
 
     def pickle_embeddings(self, model_dir, symbols_txt, pickle_file):
+        """Serializes embeddings from a model as a pickle.
+        
+        Useful for accesssing embeddings without having to install Keras. 
+        """
         import keras
         import numpy as np
 
@@ -51,15 +57,23 @@ class Frontend:
             pickle.dump(embeddings, outp)
 
     def traverse(self, embeddings_pickle, source_word, target_word):
+        """Traverses the embedding space between two words.
+        
+        Incrementally steps along the vector between embedding(source_word)
+        and embedding(target_word), outputting every new word encountered along
+        the way.
+        """
         with open(embeddings_pickle, 'rb') as inp:
             embeddings = pickle.load(inp)
 
+        print(
+            f'Traversing embedding space from {source_word} to {target_word}'
+            ' ...')
         def _get_terms():
             yield source_word
             source = copy.deepcopy(embeddings[source_word])
             delta = (embeddings[target_word] - source) / 100
             for i in range(25):
-                print(i)
                 yield random.choice(n_most_similar(source, embeddings, 3))[-1]
                 source += delta
             yield target_word
@@ -72,9 +86,11 @@ class Frontend:
                 terms.append(new_term)
                 seen.add(new_term)
 
-        print(' '.join(terms))
+        print('Traversal:')
+        print('  ' + ' -> '.join(terms))
 
     def plot(self, model_dir, plot_png):
+        """Plots model architecture."""
         import keras
         from keras.utils.vis_utils import plot_model
 
