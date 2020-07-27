@@ -1,3 +1,6 @@
+import collections
+
+
 class SymbolTable:
 
     UNK = 'UNK'

@@ -13,6 +13,7 @@ Code adapted from Adventures in Machine Learning [1] [2].
 
 import collections
 import os
+import sys
 import urllib
 import zipfile
 
@@ -99,12 +100,12 @@ class DataReader:
 
 
 # TODO: Determine vocabulary size information-theoretically.
-VOCAB_SIZE = 10000
+VOCAB_SIZE = int(sys.argv[2])
 FILENAME = 'text8'
 WINDOW_SIZE = 3
 VECTOR_DIM = 300
 NUMBER_WORDS = 50000
-EPOCHS = 200000
+EPOCHS = 100000
 
 
 reader = DataReader(FILENAME)
@@ -193,7 +194,9 @@ try:
         if cnt % 10000 == 0:
             sim_cb.run_sim()
 finally:
+    import sys
+    num = sys.argv[1]
     print('Saving model.')
-    model.save('trained_model')
+    model.save(f'trained_model_{num}')
     print('Saving symbol table.')
-    symbols.write('syms.txt')
+    symbols.write(f'syms_{num}.txt')
