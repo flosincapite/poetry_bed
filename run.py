@@ -3,9 +3,6 @@ import heapq
 import pickle
 import random
 
-import keras
-from keras.utils.vis_utils import plot_model
-import numpy as np
 from scipy.spatial.distance import cosine
 
 from util import symbol_table
@@ -27,6 +24,9 @@ def n_most_similar(embedding, embeddings, n=5):
 class Frontend:
 
     def pickle_embeddings(self, model_dir, symbols_txt, pickle_file):
+        import keras
+        import numpy as np
+
         model = keras.models.load_model(model_dir)
         symbols = symbol_table.SymbolTable.read(symbols_txt)
 
@@ -54,18 +54,18 @@ class Frontend:
         with open(embeddings_pickle, 'rb') as inp:
             embeddings = pickle.load(inp)
 
-        source = copy.deepcopy(embeddings[source_word])
-        delta = (embeddings[target_word] - source) / 100
-        terms = []
-        seen = set()
-
         def _get_terms():
             yield source_word
+            source = copy.deepcopy(embeddings[source_word])
+            delta = (embeddings[target_word] - source) / 100
             for i in range(25):
                 print(i)
                 yield random.choice(n_most_similar(source, embeddings, 3))[-1]
                 source += delta
             yield target_word
+
+        terms = []
+        seen = set()
 
         for new_term in _get_terms():
             if new_term not in seen:
@@ -75,6 +75,9 @@ class Frontend:
         print(' '.join(terms))
 
     def plot(self, model_dir, plot_png):
+        import keras
+        from keras.utils.vis_utils import plot_model
+
         model = keras.models.load_model(model_dir)
         model._layers = [
                 layer
