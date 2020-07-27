@@ -16,6 +16,6 @@ export PYTHONPATH=`pwd`:$PYTHONPATH
 ## usage
 
 ```
-python run.py --embeddings_pickle trained_models/20000_vocab/embeddings.pickle \
+python run.py traverse --embeddings_pickle trained_models/20000_vocab/embeddings.pickle \
     --source_word <word> --target_word <word>
 ```
