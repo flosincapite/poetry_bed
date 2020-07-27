@@ -67,7 +67,7 @@ class Frontend:
                 source += delta
             yield target_word
 
-        for term in _get_terms():
+        for new_term in _get_terms():
             if new_term not in seen:
                 terms.append(new_term)
                 seen.add(new_term)
