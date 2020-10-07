@@ -2,10 +2,6 @@
 
 Found text poetry generation.
 
-This is an extra paragraph.
-
-My paragraph is very good.
-
 Uses word2vec-style embeddings to traverse chains of semantic similarity between words.
 
 ## installation and setup
