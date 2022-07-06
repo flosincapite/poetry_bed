@@ -89,6 +89,16 @@ class Frontend:
         print('Traversal:')
         print('  ' + ' -> '.join(terms))
 
+    def synonyms(self, embeddings_pickle, word):
+        with open(embeddings_pickle, 'rb') as inp:
+            embeddings = pickle.load(inp)
+
+        print(f'Finding synonyms for {word}.')
+        source = copy.deepcopy(embeddings[word])
+        synonyms = n_most_similar(source, embeddings, 10)
+        for thing in synonyms:
+            print(thing[-1])
+
     def plot(self, model_dir, plot_png):
         """Plots model architecture."""
         import keras
